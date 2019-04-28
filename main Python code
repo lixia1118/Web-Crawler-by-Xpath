@@ -1,0 +1,34 @@
+from lxml import etree
+import requests
+url='https://movie.douban.com/top250'
+data=requests.get(url).text
+s=etree.HTML(data)
+#在用Google出Xpath之后，记得在后面加/text()
+title=s.xpath('//*[@id="content"]/div/div[1]/ol/li/div/div[2]/div[1]/a/span[1]/text()')
+for movies in title:
+    print(movies)
+
+
+
+#若是xpath图片则在后面加@src
+import requests
+from lxml import etree
+import urllib.request
+url='https://tieba.baidu.com/p/6094848418'
+data=requests.get(url).text
+s=etree.HTML(data)
+pic_list=s.xpath('//*[@id="post_content_125007016687"]/img/@src')
+#//*[@id="post_content_125007016687"]/img[1]
+#//*[@id="post_content_125007016687"]/img[2]
+x = 1
+print("开始下载：")
+for imgurl in pic_list:
+    print("第%s个图片正在下载："%x)
+    print(imgurl)
+    resp = urllib.request.urlopen(imgurl)
+    respHtml = resp.read()
+    picFile = open('%s.jpg' %(x+1), "wb")
+    picFile.write(respHtml)
+    picFile.close()
+    x = x+1
+print("下载结束！")
